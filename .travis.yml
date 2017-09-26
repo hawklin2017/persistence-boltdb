@@ -18,5 +18,5 @@ jobs:
         - dep ensure
       script:
         - go build -race -v -gcflags "-N -l" .
-        - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; go build --gcflags "-dynlink" --buildmode=plugin ./plugin; fi
+        - if [[ "$TRAVIS_OS_NAME" != "osx" ]]; then go build --gcflags "-dynlink" --buildmode=plugin ./plugin; fi
         - gometalinter --fast --exclude=corefoundation.go --deadline=360s --enable-gc --sort=path --vendor --cyclo-over=40 --dupl-threshold=100 --disable=gotype ./...
