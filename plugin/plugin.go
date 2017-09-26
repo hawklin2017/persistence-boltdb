@@ -45,3 +45,7 @@ func (pl *persistencePlugin) Init(c interface{}) (interface{}, error) {
 func (pl *persistencePlugin) Info() plugin.Info {
 	return &pl.info
 }
+
+func main() {
+	panic("this is a plugin, build it as a plugin")
+}
