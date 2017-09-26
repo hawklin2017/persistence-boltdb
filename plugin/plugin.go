@@ -5,14 +5,8 @@ import (
 	"github.com/VolantMQ/plugin"
 )
 
-type info struct {
-	version string
-	name    string
-	desc    string
-}
-
 type persistencePlugin struct {
-	info
+	plugin.Base
 }
 
 var _ plugin.Provider = (*persistencePlugin)(nil)
@@ -22,20 +16,8 @@ var _ plugin.Info = (*persistencePlugin)(nil)
 var Plugin persistencePlugin
 
 func init() {
-	Plugin.version = "0.0.1"
-	Plugin.name = "PERSISTENCE_BOLTDB_PLUGIN"
-}
-
-func (pl *info) Version() string {
-	return pl.version
-}
-
-func (pl *info) Name() string {
-	return pl.name
-}
-
-func (pl *info) Desc() string {
-	return pl.desc
+	Plugin.V = "0.0.1"
+	Plugin.N = "PERSISTENCE_BOLTDB_PLUGIN"
 }
 
 func (pl *persistencePlugin) Init(c interface{}) (interface{}, error) {
@@ -43,7 +25,7 @@ func (pl *persistencePlugin) Init(c interface{}) (interface{}, error) {
 }
 
 func (pl *persistencePlugin) Info() plugin.Info {
-	return &pl.info
+	return pl
 }
 
 func main() {
