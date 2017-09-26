@@ -5,7 +5,7 @@
   branch = "master"
   name = "github.com/VolantMQ/persistence"
   packages = ["."]
-  revision = "72778c0a168b897808aa5d7bb3b9cfa97c965158"
+  revision = "5fff1594612442a04a697ba5f9bb3607ad56bf8f"
 
 [[projects]]
   branch = "master"
