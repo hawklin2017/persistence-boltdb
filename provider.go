@@ -16,6 +16,7 @@ var (
 	bucketPackets       = []byte("packets")
 	bucketState         = []byte("state")
 	bucketSystem        = []byte("system")
+	sessionsCount       = []byte("count")
 )
 
 // Config configuration of the BoltDB backend
@@ -63,6 +64,19 @@ func New(c interface{}) (p persistence.Provider, err error) {
 		return nil, err
 	}
 
+	err = pl.db.db.Update(func(tx *bolt.Tx) error {
+		for _, b := range initialBuckets {
+			if _, e := tx.CreateBucketIfNotExists(b); e != nil {
+				return e
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
 	pl.r = retained{
 		db:   &pl.db,
 		wgTx: &pl.wgTx,
@@ -81,16 +95,7 @@ func New(c interface{}) (p persistence.Provider, err error) {
 		lock: &pl.lock,
 	}
 
-	err = pl.db.db.Update(func(tx *bolt.Tx) error {
-		for _, b := range initialBuckets {
-			if _, e := tx.CreateBucketIfNotExists(b); e != nil {
-				return e
-			}
-		}
-		return nil
-	})
-
-	if err != nil {
+	if err = pl.s.init(); err != nil {
 		return nil, err
 	}
 

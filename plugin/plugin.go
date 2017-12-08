@@ -2,15 +2,15 @@ package main
 
 import (
 	"github.com/VolantMQ/persistence-boltdb"
-	"github.com/VolantMQ/plugin"
+	vlPlugin "github.com/VolantMQ/plugin"
 )
 
 type persistencePlugin struct {
-	plugin.Base
+	vlPlugin.Base
 }
 
-var _ plugin.Provider = (*persistencePlugin)(nil)
-var _ plugin.Info = (*persistencePlugin)(nil)
+var _ vlPlugin.Provider = (*persistencePlugin)(nil)
+var _ vlPlugin.Info = (*persistencePlugin)(nil)
 
 // Plugin symbol
 var Plugin persistencePlugin
@@ -24,7 +24,7 @@ func (pl *persistencePlugin) Init(c interface{}) (interface{}, error) {
 	return boltdb.New(c)
 }
 
-func (pl *persistencePlugin) Info() plugin.Info {
+func (pl *persistencePlugin) Info() vlPlugin.Info {
 	return pl
 }
 
