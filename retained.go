@@ -15,6 +15,7 @@ type retained struct {
 	lock *sync.Mutex
 }
 
+//桶结构：retained-->id-->data + expireAt
 func (r *retained) Load() ([]persistence.PersistedPacket, error) {
 	var res []persistence.PersistedPacket
 

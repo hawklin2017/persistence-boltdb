@@ -38,6 +38,7 @@ func (s *sessions) init() error {
 	})
 }
 
+//桶结构system-->version + NodeName
 func (s *sessions) Exists(id []byte) bool {
 	err := s.db.db.View(func(tx *bolt.Tx) error {
 		sessions := tx.Bucket(bucketSessions)
@@ -116,6 +117,7 @@ func byteToBool(v byte) bool {
 	return !(v == 0)
 }
 
+//桶结构：session-->id-->packets-->id-->data + unAck + expireAt
 func (s *sessions) PacketsForEach(id []byte, loader persistence.PacketLoader) error {
 	return s.db.db.View(func(tx *bolt.Tx) error {
 		root := tx.Bucket(bucketSessions)
@@ -160,6 +162,7 @@ func (s *sessions) PacketsForEach(id []byte, loader persistence.PacketLoader) er
 	})
 }
 
+//批量存储
 func (s *sessions) PacketsStore(id []byte, packets []persistence.PersistedPacket) error {
 	return s.db.db.Update(func(tx *bolt.Tx) error {
 		buck, err := createPacketsBucket(tx, id)
@@ -177,6 +180,7 @@ func (s *sessions) PacketsStore(id []byte, packets []persistence.PersistedPacket
 	})
 }
 
+//单个存储
 func (s *sessions) PacketStore(id []byte, packet persistence.PersistedPacket) error {
 	err := s.db.db.Update(func(tx *bolt.Tx) error {
 		buck, err := createPacketsBucket(tx, id)
@@ -203,6 +207,7 @@ func (s *sessions) PacketsDelete(id []byte) error {
 	})
 }
 
+//桶结构：session-->id-->state-->version + timestamp + subscriptions + expire-->since + expireIn + willIn + willData
 func (s *sessions) LoadForEach(loader persistence.SessionLoader, context interface{}) error {
 	return s.db.db.Update(func(tx *bolt.Tx) error {
 		sessions := tx.Bucket(bucketSessions)

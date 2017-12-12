@@ -77,18 +77,23 @@ func New(c interface{}) (p persistence.Provider, err error) {
 		return nil, err
 	}
 
+	//桶结构：retained-->id-->data + expireAt
 	pl.r = retained{
 		db:   &pl.db,
 		wgTx: &pl.wgTx,
 		lock: &pl.lock,
 	}
 
+	//桶结构：session-->id-->subscriptions
+	//桶结构：session-->id-->packets-->id-->data + unAck + expireAt
+	//桶结构：session-->id-->state-->version + timestamp + subscriptions + expire-->since + expireIn + willIn + willData
 	pl.s = sessions{
 		db:   &pl.db,
 		wgTx: &pl.wgTx,
 		lock: &pl.lock,
 	}
 
+	//桶结构system-->version + NodeName
 	pl.sys = system{
 		db:   &pl.db,
 		wgTx: &pl.wgTx,
